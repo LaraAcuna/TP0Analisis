@@ -2,7 +2,7 @@ package algoritmia;
 
 /**
  *
- * @author Lara
+ * @author lara.acuna
  */
 public class EjercicioCinco {
     
@@ -10,42 +10,60 @@ public class EjercicioCinco {
         return (int) (minimo + Math.random() * (maximo - minimo));
     }
     
-    private static int[] generarArregloAleatorio(int tamanio){
-        int[] arreglo = new int[tamanio];
-        for(int i=0; i<tamanio; i++){
-            arreglo[i] = generarEnteroAleatorio(1, 1000);
+    private static int intentarAdivinar(int minimo, int maximo){
+        //intento adivinar tomando la mitad de los dos numeros
+        int mitad = (minimo + maximo)/2;
+        System.out.print("La mitad de "+minimo+" y "+maximo+" es "+mitad);
+        if(minimo == mitad || maximo == mitad){
+            System.out.print(" (ya no lo puedo partir mas)");
         }
-        return arreglo;
+        System.out.println("");
+        return mitad;
     }
     
-    private static int[] crearFusionDeArreglos(int[] arregloA, int[]arregloB){
-        int tamanioA = arregloA.length;
-        int tamanioB = arregloB.length;
-        int tamanio =  tamanioA + tamanioB;
-        int[] arregloC = new int[tamanio];
-        for(int i=0; i<tamanioA; i++){
-            arregloC[i] = arregloA[i];
+    private static void simularJuego(int numero, int minimo, int maximo){
+        int cantidadDeIntentos = 1;
+        System.out.println("El numero a adivinar: "+numero);
+        System.out.println("///////");
+        int intento = intentarAdivinar(minimo, maximo);
+        int intentoAnterior = intento;
+        System.out.println("intento nro "+cantidadDeIntentos+": "+intento);
+        System.out.println("///////");
+        while(intento!=numero){
+            System.out.println("///////");
+            System.out.println("El numero a adivinar: "+numero);
+            System.out.println("Antes intenté: "+intentoAnterior);
+            if(numero>intento){
+                minimo = intento;
+            }else{
+                maximo = intento;
+            }
+            intento = intentarAdivinar(minimo, maximo);
+            if(intento == intentoAnterior){
+                System.out.println("pero ya lo intenté antes.");
+                if(numero>intento){
+                    intento++;
+                }else{
+                    intento--;
+                }
+            }
+            intentoAnterior = intento;
+            cantidadDeIntentos++;
+            System.out.println("intento nro "+cantidadDeIntentos+": "+intento);
+            System.out.println("///////");
         }
-        for(int i=0; i<tamanioB; i++){
-            arregloC[(i+tamanioA)] = arregloB[i];
-        }
-        Utiles.mezclar(arregloC, 1, tamanioA, tamanio);
-        return arregloC;
+        System.out.println("Lo adivine en "+cantidadDeIntentos+" intentos");
     }
     
     public static void main(String[] args){
-        int tamanioA = 100;
-        int tamanioB = 60;
-        int[] arregloA = generarArregloAleatorio(tamanioA);
-        int[] arregloB = generarArregloAleatorio(tamanioB);
-        Utiles.mergeSort(arregloA);
-        Utiles.burbujaMejorado(arregloB);
-        int[] arregloC = crearFusionDeArreglos(arregloA, arregloB);
-        System.out.println("El arreglo A es: ");
-        Utiles.mostrarArreglo(arregloA);
-        System.out.println("\n El arreglo B es: ");
-        Utiles.mostrarArreglo(arregloB);
-        System.out.println("\n El arreglo C es: ");
-        Utiles.mostrarArreglo(arregloC);
+        int minimo = 1;
+        int maximo = 1000000;
+        int numeroSecreto;
+        numeroSecreto = 750000;
+        //numeroSecreto = minimo;
+        //numeroSecreto = generarEnteroAleatorio(minimo, maximo);
+        //numeroSecreto = 750001;
+        //numeroSecreto = maximo;
+        simularJuego(numeroSecreto, minimo, maximo);
     }
 }
